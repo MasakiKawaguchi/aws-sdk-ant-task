@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="Shift_JIS"?>
+<project name="EC2" default="export" basedir="." xmlns:aws="antlib:com.AWSManagementAntTask">
+  <property file="build.properties"/>
+  <property environment="env"/>
+  <taskdef resource="com/AWSManagementAntTask/antlib.xml" uri="antlib:com.AWSManagementAntTask">
+    <classpath>
+        <fileset dir="lib">
+            <include name="**/*.jar"/>
+        </fileset>
+    </classpath>
+  </taskdef>
+  <target name="export">
+    <aws:export format="s3excel"/>
+  </target>
+  <target name="jar">
+    <jar destfile="lib/ec2_kawa.jar" >
+      <fileset dir="bin" includes="**/*.*" />
+        <!--<fileset dir="src" includes="**/*.*" />-->
+        <manifest>
+            <attribute name="Application-Name" value="aws management tool"/>
+            <attribute name="Permissions" value="all-permissions"/>
+            <!-- Who is building this jar? -->
+            <attribute name="Built-By" value="${user.name}"/>
+        </manifest>
+        </jar>
+   </target>
+</project>

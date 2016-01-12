@@ -1,0 +1,3 @@
+<antlib>
+    <typedef name="export" classname="com.AWSManagementAntTask.ant.task.ExportAWSInfoTask"/>
+</antlib>
