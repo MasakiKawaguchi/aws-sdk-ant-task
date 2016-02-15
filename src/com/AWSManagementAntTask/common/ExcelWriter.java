@@ -35,13 +35,13 @@ public class ExcelWriter {
 	private Integer ROW_LIMIT = 9999;
 	//	private Integer COL_ADMIN_STATE = 2;
 
-	private Integer COL_EC2_ADMIN_STATUS = 11;
+	private Integer COL_EC2_ADMIN_STATUS = 18;
 	private Integer COL_EC2_REGION_NAME = 2;
-	private Integer COL_EC2_INSTANCE_ID = 12;
+	private Integer COL_EC2_INSTANCE_ID = 14;
 	private Integer COL_EC2_INSTANCE_NAME = 3;
-	private Integer COL_EC2_INSTANCE_TYPE = 13;
-	private Integer COL_EC2_STATUS = 14;
-	private Integer COL_EC2_LAUNCH_DATE = 15;
+	private Integer COL_EC2_INSTANCE_TYPE = 15;
+	private Integer COL_EC2_STATUS = 16;
+	private Integer COL_EC2_LAUNCH_DATE = 17;
 
 	private Integer COL_RDS_ADMIN_STATUS = 10;
 	private Integer COL_RDS_REGION_NAME = 2;
@@ -124,16 +124,17 @@ public class ExcelWriter {
 		for (Integer i = startrow; i < ROW_LIMIT; i++) {
 			HSSFRow row = sheet.getRow(i);
 			HSSFCell cell = row.getCell(keyColumnNum);
-			if (StringUtils.isBlank(cell.getStringCellValue())) {
+			String keyStr = cell.getStringCellValue().trim();
+			if (StringUtils.isBlank(keyStr)) {
 				endrow = i - 1;
 				break;
 			}
-			rows.put(cell.getStringCellValue(), i);
+			rows.put(keyStr, i);
 			Boolean flg = false;
 			/* ※個別変更箇所 */
 			for (IAWSDto awsdto : dto.getEc2list()) {
 				EC2Dto spdto = (EC2Dto) awsdto;
-				if (StringUtils.equals(spdto.getName(), cell.getStringCellValue())) {
+				if (StringUtils.equals(spdto.getName(), keyStr)) {
 					setCellValueforEC2(row, spdto);
 					flg = true;
 				}
@@ -220,16 +221,17 @@ public class ExcelWriter {
 		for (Integer i = startrow; i < ROW_LIMIT; i++) {
 			HSSFRow row = sheet.getRow(i);
 			HSSFCell cell = row.getCell(keyColumnNum);
-			if (StringUtils.isBlank(cell.getStringCellValue())) {
+			String keyStr = cell.getStringCellValue().trim();
+			if (StringUtils.isBlank(keyStr)) {
 				endrow = i - 1;
 				break;
 			}
-			rows.put(cell.getStringCellValue(), i);
+			rows.put(keyStr, i);
 			Boolean flg = false;
 			/* ※個別変更箇所 */
 			for (IAWSDto awsdto : dto.getVllist()) {
 				VolumeDto spdto = (VolumeDto) awsdto;
-				if (StringUtils.equals(spdto.getVolumeId(), cell.getStringCellValue())) {
+				if (StringUtils.equals(spdto.getVolumeId(), keyStr)) {
 					HSSFCell upcell = row.getCell(COL_ADMIN_STATUS);
 					upcell.setCellValue(spdto.getWarnMsg());
 					upcell = row.getCell(COL_ADMIN_STATUS + 3);
@@ -314,16 +316,17 @@ public class ExcelWriter {
 		for (Integer i = startrow; i < ROW_LIMIT; i++) {
 			HSSFRow row = sheet.getRow(i);
 			HSSFCell cell = row.getCell(keyColumnNum);
-			if (StringUtils.isBlank(cell.getStringCellValue())) {
+			String keyStr = cell.getStringCellValue().trim();
+			if (StringUtils.isBlank(keyStr)) {
 				endrow = i - 1;
 				break;
 			}
-			rows.put(cell.getStringCellValue(), i);
+			rows.put(keyStr, i);
 			Boolean flg = false;
 			/* ※個別変更箇所 */
 			for (IAWSDto awsdto : dto.getEiplist()) {
 				ElasticIPDto spdto = (ElasticIPDto) awsdto;
-				if (StringUtils.equals(spdto.getPublicIp(), cell.getStringCellValue())) {
+				if (StringUtils.equals(spdto.getPublicIp(), keyStr)) {
 					HSSFCell upcell = row.getCell(COL_ADMIN_STATUS);
 					upcell.setCellValue(spdto.getWarnMsg());
 					upcell = row.getCell(COL_ADMIN_STATUS + 3);
@@ -393,16 +396,17 @@ public class ExcelWriter {
 		for (Integer i = startrow; i < ROW_LIMIT; i++) {
 			HSSFRow row = sheet.getRow(i);
 			HSSFCell cell = row.getCell(keyColumnNum);
-			if (StringUtils.isBlank(cell.getStringCellValue())) {
+			String keyStr = cell.getStringCellValue().trim();
+			if (StringUtils.isBlank(keyStr)) {
 				endrow = i - 1;
 				break;
 			}
-			rows.put(cell.getStringCellValue(), i);
+			rows.put(keyStr, i);
 			Boolean flg = false;
 			/* ※個別変更箇所 */
 			for (IAWSDto awsdto : dto.getRdslist()) {
 				RDSDto ｓｐdto = (RDSDto) awsdto;
-				if (StringUtils.equals(ｓｐdto.getDBInstanceIdentifier(), cell.getStringCellValue())) {
+				if (StringUtils.equals(ｓｐdto.getDBInstanceIdentifier(), keyStr)) {
 					setCellValueforRDS(row, ｓｐdto);
 					flg = true;
 				}
@@ -436,11 +440,11 @@ public class ExcelWriter {
 		cell.setCellValue(dto.getRegionName());
 		cell = row.getCell(COL_RDS_DB_IDENTIFIER);
 		cell.setCellValue(dto.getDBInstanceIdentifier());
-		cell = row.getCell(COL_RDS_ADMIN_STATUS + 1);
-		cell.setCellValue(dto.getEngine());
 		cell = row.getCell(COL_RDS_ADMIN_STATUS + 2);
-		cell.setCellValue(dto.getDBInstanceStatus());
+		cell.setCellValue(dto.getEngine());
 		cell = row.getCell(COL_RDS_ADMIN_STATUS + 3);
+		cell.setCellValue(dto.getDBInstanceStatus());
+		cell = row.getCell(COL_RDS_ADMIN_STATUS + 4);
 		cell.setCellValue(new SimpleDateFormat(Const.FT_YYYYMMDD).format(dto.getInstanceCreateTime()));
 	}
 
@@ -475,16 +479,17 @@ public class ExcelWriter {
 		for (Integer i = startrow; i < ROW_LIMIT; i++) {
 			HSSFRow row = sheet.getRow(i);
 			HSSFCell cell = row.getCell(keyColumnNum);
-			if (StringUtils.isBlank(cell.getStringCellValue())) {
+			String keyStr = cell.getStringCellValue().trim();
+			if (StringUtils.isBlank(keyStr)) {
 				endrow = i - 1;
 				break;
 			}
-			rows.put(cell.getStringCellValue(), i);
+			rows.put(keyStr, i);
 			Boolean flg = false;
 			/* ※個別変更箇所 */
 			for (IAWSDto awsdto : dto.getS3list()) {
 				S3Dto spdto = (S3Dto) awsdto;
-				if (StringUtils.equals(spdto.getName(), cell.getStringCellValue())) {
+				if (StringUtils.equals(spdto.getName(), keyStr)) {
 					setCellValueforS3(row, spdto);
 					flg = true;
 				}

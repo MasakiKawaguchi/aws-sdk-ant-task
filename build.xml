@@ -2,13 +2,10 @@
 <project name="EC2" default="export" basedir="." xmlns:aws="antlib:com.AWSManagementAntTask">
   <property file="build.properties"/>
   <property environment="env"/>
-  <taskdef resource="com/AWSManagementAntTask/antlib.xml" uri="antlib:com.AWSManagementAntTask">
-    <classpath>
-        <fileset dir="lib">
-            <include name="**/*.jar"/>
-        </fileset>
-    </classpath>
-  </taskdef>
+  <path id="classpath">
+    <fileset dir="lib" includes="**/*.jar"/>
+  </path>
+  <taskdef resource="com/AWSManagementAntTask/antlib.xml" uri="antlib:com.AWSManagementAntTask" classpathref="classpath" />
   <target name="export">
     <aws:export format="s3excel"/>
   </target>

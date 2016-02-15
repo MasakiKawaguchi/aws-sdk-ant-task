@@ -111,7 +111,7 @@ public class S3Dao {
 
 		try {
 			File file = new File(dto.getFilename() + ".xls");
-			s3.putObject(dto.getBucketname(), dto.getFilename(), file);
+			s3.putObject(dto.getBucketname(), dto.getFilename() + ".xls", file);
 		} catch (AmazonClientException e) {
 			e.printStackTrace();
 			throw new BuildException(e);
